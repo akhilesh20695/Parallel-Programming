@@ -5,13 +5,15 @@
 #include <string.h>
 #include <math.h>
 #include "normsinv.h"
+typedef long double ld;
 int main()
 {
 	int len;
     unsigned int myseed = rand();   
     int i;    
-    long double randomnum[100000];
-    long double mu,sigma,stockprice_initial,temp,temp2,stockprice[100000],prefixsum[100000],time,dt;
+    ld* randomnum=malloc(1000000*sizeof(ld));
+    ld* stockprice=malloc(1000000*sizeof(ld));
+    ld mu,sigma,stockprice_initial,temp,temp2,time,dt;
     
 
     printf("Enter Initial stock price : $");
@@ -41,9 +43,8 @@ int main()
 
     for(i=1; i<len; i++)
     {
-        randomnum[i]=randomnum[i-1]+sqrt(dt)*randomnum[i];
+        randomnum[i]=randomnum[i]+sqrt(dt)*randomnum[i-1];
     }
-
     for(i=1;i<len;i++)
     {
         stockprice[i]=stockprice[0]*exp((mu-(pow(sigma,2))*0.5)*(i-1)*dt + sigma*randomnum[i]);
@@ -55,14 +56,13 @@ int main()
     }
 
     FILE *fp = fopen("StockPrice.txt", "w");
-    for(i=0;i<len-1;i++)
+    for(i=0;i<len;i++)
     {
         fprintf(fp, "%Lg", stockprice[i]);
         fprintf(fp, "\n");
     }
-    fprintf(fp, "%Lg", stockprice[len-1]);
     fclose(fp);
-
+free(randomnum);
     
     return 0;
 }
