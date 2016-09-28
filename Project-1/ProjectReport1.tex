@@ -5,6 +5,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{tabu}
 \author{Akhilesh Kumar (201351009) \\ Gaurav Tolani 201352021}
 \title{Parallel Programming (CS403)\\ Project-1\\Simulation of Brownian Movement of a Stock Price}
 \begin{document}
@@ -45,9 +46,9 @@ An algorithm for simulating the stock price at time t>0, given that current pric
 \end{enumerate}
 \section{Output}
 \subsection{Language Used}
-Due to time constraint, for the time being, we have implemented the serial code on the language R. R is a programming language and software environment for statistical computing and graphics supported by the R Foundation for Statistical Computing. The R language is widely used among statisticians and data miners for developing statistical software and data analysis.\\
+Due to time constraint, for the time being, we have implemented the serial code on the language R and C. R is a programming language and software environment for statistical computing and graphics supported by the R Foundation for Statistical Computing. The R language is widely used among statisticians and data miners for developing statistical software and data analysis.\\
 Because of the some inbuilt features which R provide (eg. inbuilt function for generating random variable and graph plotting), the effort for making code was considerably reduced.
-\subsection{Outputs(Graphs and execution time)}
+\subsection{Outputs(Graphs and execution time for 'R')}
 Given the parameters,\\
 $S_{0}$, initial price of stock= 10,\\
 $\mu$, expected return=13\%,\\
@@ -124,6 +125,108 @@ time, t=100
 \end{figure}
 
 \end{enumerate}
+\newpage
+\subsection{Outputs(Graphs and execution time for 'C')}
+Given the parameters,\\
+$S_{0}$, initial price of stock= 10,\\
+$\mu$, expected return=13\%,\\
+$\sigma$, standard  deviation of returns=15\%,\\
+time, t=100
+\begin{enumerate}
+\item For 100 simulations,\\
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{100_SIM_GBM_SERIAL_C}
+\caption{Execution time for 100 simulations}
+\end{figure}
+
+\item For 1000 simulations,\\
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{1000_SIM_GBM_SERIAL_C}
+\caption{Execution time for 1000 simulations}
+\end{figure}
+
+\newpage
+
+\item For 10000 simulations,\\
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{10000_SIM_GBM_SERIAL_C}
+\caption{Execution time for 10000 simulations}
+\end{figure}
+
+\item For 100000 simulations,\\
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{100000_SIM_GBM_SERIAL_C}
+\caption{Execution time for 100000 simulations}
+\end{figure}
+
+\item For 1000000 simulations,\\
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{1000000_SIM_GBM_SERIAL_C}
+\caption{Execution time for 1000000 simulations}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{CPU_usage_GBM_seq}
+\caption{System Monitor for 1000000 simulations}
+\end{figure}
+\end{enumerate}
+
+\subsubsection{Time Matrix for different number of simulations}
+\begin{tabu} to 1.0\textwidth { | X[l] | X[c] | X[r] | X[l] | X[c] | X[r] |  }
+ \hline
+ Number of Iterations & 100 & 1000 & 10000 & 100000 & 1000000 \\
+ \hline
+ Time(In Seconds)  & 5.313  & 4.979 & 5.783 & 5.803 & 9.808  \\
+\hline
+\end{tabu}
+
+\newpage
+\subsubsection{Graph Between number of iterations and corresponding time taken}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.3]{Serial_graph}
+\caption{Graph between Number of Simulations and Time(In seconds)}
+\end{figure}
+
+\subsubsection{Memory Allocation and Error Analysis}
+\paragraph{Valgrind :}
+It is a memory tool that will alert you about memory bugs and point you to where the problem might be. \\
+\paragraph{Leaks vs Errors :}
+Leaks occur when you allocate(malloc) memory that you fail to free and Errors occur when you attempt to read or write memory that you do not have access to (e.g. writing off the end of an array)\\ 
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{Valgrind_GBM_seq_C}
+\caption{Valgrind Memory Check Analysis of Serial Code}
+\end{figure}
+\newpage
+\paragraph{Explanation:} 
+There are Generally Two types of errors in memory check method\\ 
+  (i)Invalid Read of size X(When we try to access a memory that we don't   
+     have access to).\\
+  (ii)Invalid write of size X(When we try to write into a memory that we 
+      don't have access to)\\
+In the serial code of GBM, we neither have any Invalid reads not Invalid     
+writes(refer Figure 19).\\
+\begin{figure}[h]
+\includegraphics[scale=0.26]{k_cache_grind_serial}
+\caption{KCache Grind Analysis of Serial code}
+\end{figure}
+
+\newpage
+\section{Task Dependency Graph}
+As There is only quantity that is being calculated for each simulation i.e. W(t).
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.06]{Task_Dependency_Serial}
+\caption{Task Dependency Graph for Serial Code}
+\end{figure}
+
 
 \newpage
 \section{Conclusion}
